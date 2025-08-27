@@ -67,7 +67,7 @@ public class MyPropsRunner implements ApplicationRunner {
         });
         System.out.println("===> 람다함수");
         //2. 함수형 인터페이스 (람다함수)
-        args.getOptionNames().forEach(name -> System.out.println(name));
+        args.getOptionNames().forEach(name -> logger.debug(name));
         System.out.println("===> Method Reference");
         //3. Method Reference (아규먼트를 생략한 람다함수)
         args.getOptionNames().forEach(System.out::println);

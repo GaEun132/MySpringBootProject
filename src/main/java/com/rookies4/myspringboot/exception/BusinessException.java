@@ -1,5 +1,6 @@
 package com.rookies4.myspringboot.exception;
 
+import com.rookies4.myspringboot.exception.advice.ErrorCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -16,5 +17,10 @@ public class BusinessException extends RuntimeException {
     public BusinessException(String message, HttpStatus httpStatus) {
         this.message = message;
         this.httpStatus = httpStatus;
+    }
+
+    public BusinessException(ErrorCode errorCode, Object... args) {
+        this.message = errorCode.formatMessage(args);
+        this.httpStatus = errorCode.getHttpStatus();
     }
 }

@@ -6,6 +6,7 @@ import com.rookies4.myspringboot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/api/users1")
 public class UserRestController {
     private final UserRepository userRepository;
 
@@ -30,11 +31,13 @@ public class UserRestController {
     }
     //전체 목록 조회
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<UserEntity> getUsers() {
         return userRepository.findAll();
     }
     //ID로 개별 조회
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public UserEntity getUser(@PathVariable Long id) {
         UserEntity existUser = getExistUser(id);
         return existUser;
@@ -67,6 +70,11 @@ public class UserRestController {
         UserEntity existUser = optionalUser
                 .orElseThrow(() -> new BusinessException("User Not Found", HttpStatus.NOT_FOUND));
         return existUser;
+    }
+    //인증 없이 접근 가능한 controller
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "Welcome this endpoint is not secure";
     }
 
 
